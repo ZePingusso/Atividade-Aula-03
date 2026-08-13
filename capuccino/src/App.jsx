@@ -2,21 +2,21 @@ import { useEffect, useState } from 'react';
 import './App.css';
 
 function App() {
-  const [posts, setPosts] = useState([]);
+  const [users, setUsers] = useState([]);
   useEffect(() => {
-    async function buscarPosts(){
-      const resposta = await fetch("https://jsonplaceholder.typicode.com/comments?postId=1");
+    async function buscarUsers(){
+      const resposta = await fetch("https://reqres.in/api/users?page=2");
       const dados = await resposta.json();
-      setPosts(dados);
+      setUsers(dados.data);
     }
-    buscarPosts();
+    buscarUsers();
   }, []);
 
   return (
     <>
       <section id="center">
-        {posts.map(post => (
-          <li key={post.id}>{post.name} {post.email}</li>
+        {users.map(user => (
+          <li key={user.id}>{user.first_name}, {user.last_name}, {user.email}</li>
         ))}
       </section>
     </>
