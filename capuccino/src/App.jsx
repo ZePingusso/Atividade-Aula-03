@@ -1,28 +1,47 @@
-import { useEffect, useState } from 'react';
-import './App.css';
+import { useEffect, useState } from 'react'
 
-function App() {
-  const [users, setUsers] = useState(null);
+export default function ListaUsuarios() {
+  const [usuarios, setUsuarios] = useState([])
+  const [carregando, setCarregando] = useState(true)
+  const [erro, setErro] = useState(null)
+
   useEffect(() => {
-    async function buscarUsers(){
-      const resposta = await fetch("https://jsonplaceholder.typicode.com/users/5");
-      const dados = await resposta.json();
-      setUsers(dados);
+    const controle = new AbortController()
+    const signal = controle.signal
+
+    async function buscar() {
+      try {
+        setCarregando(true)
+        setErro(null)
+        const resp = await fetch('https://jsonplaceholder.typicode.com/users', { signal })
+        if (!resp.ok) throw new Error(`HTTP ${resp.status}`)
+        const data = await resp.json()
+        setUsuarios(data)
+      } catch (e) {
+        if (e.name !== 'AbortError') {
+          // Ignora AbortError: é quando nós mesmos cancelamos
+          setErro(e.message)
+        }
+      } finally {
+        setCarregando(false)
+      }
     }
-    buscarUsers();
-  }, []);
-  if (users === null) {
-    return <h1>Carregando...</h1>
-  }
-  
+
+    buscar()
+
+    // Cleanup: ao desmontar, cancela a requisição em andamento
+    return () => controle.abort()
+  }, [])
+
+  if (carregando) return <p>Carregando...</p>
+  if (erro) return <p>Erro: {erro}</p>
+  if (usuarios.length === 0) return <p>Nenhum usuário encontrado.</p>
+
   return (
-    <>
-      <section id="center">
-        <h1>{users.name}</h1>
-        <h1>{users.email}</h1>
-      </section>
-    </>
+    <ul>
+      {usuarios.map(u => (
+        <li key={u.id}>{u.name}</li>
+      ))}
+    </ul>
   )
 }
-
-export default App
