@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import Atualizando from './AttUsuario.jsx'
 
 function ListaUsuarios() {
   const [usuarios, setUsuarios] = useState([])
@@ -39,8 +40,12 @@ function ListaUsuarios() {
 
   return (
     <ul>
-      {usuarios.map(u => (
-        <li key={u.id}>{u.name}</li>
+      {usuarios.map((u) => (
+        <li key={u.id}>
+          {u.name}
+          <button onClick={() => Atualizando(u)}>Editar</button>
+          <button onClick={() => onExcluir(u.id)}>Excluir</button>
+        </li>
       ))}
     </ul>
   )
