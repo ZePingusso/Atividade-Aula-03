@@ -1,6 +1,6 @@
 import { useState } from "react"
 
-export default function NovoUsuario () {
+export default function NovoUsuario ({ usuario, onSalvo, onCancelar}) {
     const [nome, setNome] = useState('')
     const [email, setEmail] = useState('')
     const [enviando, setEnviando] = useState(false)
@@ -13,10 +13,15 @@ export default function NovoUsuario () {
         setErro(null)
         setCriado(null)
 
+        const method = usuario ? 'PUT' : 'POST'
+        const url = usuario 
+            ? `https://jsonplaceholder.typicode.com/users/${usuario.id}`
+            : 'https://jsonplaceholder.typicode.com/users' 
+
         try {
             const resp = await fetch('https://jsonplaceholder.typicode.com/users', 
                 {
-                    method: 'POST',
+                    method,
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ name: nome, email})
                 })
