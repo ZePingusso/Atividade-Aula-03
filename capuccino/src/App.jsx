@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import { useEffect, useState } from 'react'
 import ListaUsuarios from './components/listaUsuario.jsx'
 import FormUsuario from './components/formulario.jsx'
