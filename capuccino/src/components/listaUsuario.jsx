@@ -1,20 +1,40 @@
-export default function ListaUsuarios({ usuarios, onEditar, onExcluir, excluindoId }) {
-	return (
-		<ul className="user-list">
-			{usuarios.map((usuario) => (
-				<li key={usuario.id} className="user-row">
-					<div>
-						<strong>{usuario.id} - {usuario.name}</strong>
-						<span>{usuario.email}</span>
-					</div>
-					<div className="row-actions">
-						<button type="button" className="button-secondary" onClick={() => onEditar(usuario)} disabled={excluindoId !== null}>Editar</button>
-						<button type="button" className="button-danger" onClick={() => onExcluir(usuario.id)} disabled={excluindoId !== null}>
-							{excluindoId === usuario.id ? 'Excluindo...' : 'Excluir'}
-						</button>
-					</div>
-				</li>
-			))}
-		</ul>
-	)
+
+export default function ListaUsuarios({
+    usuarios,
+    onExcluir,
+    onEditar,
+    excluindoId,
+}) {
+    return (
+        <div className="user-list">
+            {usuarios.map((usuario) => (
+                <article className="user-card" key={usuario.id}>
+                    <div className="user-info">
+                        <h3>{usuario.name ?? usuario.nome}</h3>
+                        <p>{usuario.email}</p>
+                    </div>
+
+                    <div className="user-actions">
+                        <button
+                            type="button"
+                            className="button-secondary"
+                            onClick={() => onEditar(usuario)}
+                        >
+                            Editar
+                        </button>
+
+                        <button
+                            type="button"
+                            onClick={() => onExcluir(usuario.id)}
+                            disabled={excluindoId === usuario.id}
+                        >
+                            {excluindoId === usuario.id
+                                ? 'Excluindo...'
+                                : 'Excluir'}
+                        </button>
+                    </div>
+                </article>
+            ))}
+        </div>
+    );
 }
